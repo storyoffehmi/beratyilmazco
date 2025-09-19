@@ -1,0 +1,23 @@
+.home-container {
+  padding: 50px;
+  text-align: center;
+}
+
+.action-button {
+  padding: 15px 30px;
+  font-size: 18px;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-top: 20px;
+}
+
+.action-button:hover {
+  background-color: #218838;
+}
+
+.button-link {
+  text-decoration: none;
+}
