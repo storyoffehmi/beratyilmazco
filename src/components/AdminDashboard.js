@@ -100,7 +100,11 @@ const AdminDashboard = () => {
     if (window.confirm("Bu randevuyu tamamen silmek istediğinizden emin misiniz?")) {
       await deleteDoc(doc(db, "appointments", appId));
       const slotsDocRef = doc(db, "availableSlots", date);
-      await updateDoc(slotsDocRef, { times: arrayUnion(time) });
+      // Silinen randevunun saatini tekrar müsait hale getirmek için kontrol
+      const docSnap = await getDoc(slotsDocRef);
+      if (docSnap.exists()) {
+          await updateDoc(slotsDocRef, { times: arrayUnion(time) });
+      }
       fetchSlotsAndAppointments();
     }
   };
@@ -146,8 +150,12 @@ const AdminDashboard = () => {
                       {appointments.map(app => (
                           <li key={app.id} className={`status-${app.status}`}>
                               <span>
-                                <span className="time">{app.time}</span> - {`${app.name} ${app.surname}`} ({app.service})
+                                <span className="time">{app.time}</span> - <span className="service">{app.service}</span>
                               </span>
+                               <div className="customer-info">
+                                <span className="customer-name">{`${app.name} ${app.surname}`}</span>
+                                <span className="customer-phone">{app.customerPhoneNumber}</span>
+                              </div>
                               <div className="appointment-actions">
                                 {app.status === 'booked' && (
                                   <>

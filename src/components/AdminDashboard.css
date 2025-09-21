@@ -35,6 +35,31 @@
   font-weight: 400;
 }
 
+.page-header-nav {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  z-index: 10;
+}
+
+.nav-button {
+  background-color: rgba(0, 0, 0, 0.5);
+  color: #ffffff;
+  border: 1px solid #ffffff;
+  border-radius: 20px;
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.nav-button:hover {
+  background-color: #ffffff;
+  color: #000000;
+}
+
 .form-group {
   margin-bottom: 25px;
 }
@@ -104,13 +129,25 @@
   background-color: #c8c8c8;
 }
 
+.appointments-list li > span:first-child {
+  flex-grow: 1;
+}
+
 .appointments-list .time { font-weight: 700; }
 .appointments-list .service { text-transform: capitalize; }
-.appointments-list .customer { font-style: italic; }
+.appointments-list .customer-info {
+  display: flex;
+  flex-direction: column;
+  text-align: right;
+  margin-left: 10px;
+}
+.customer-info .customer-name { font-style: italic; font-weight: 700; }
+.customer-info .customer-phone { font-size: 0.9em; color: #333; }
 
 .appointment-actions {
   display: flex;
   gap: 8px;
+  margin-left: 15px;
 }
 
 .action-btn {
@@ -139,3 +176,28 @@
   border-left: 5px solid #8B0000;
   opacity: 0.6;
 }
+
+.add-form h4 { margin-top: 0; }
+.add-form-controls {
+  display: flex;
+  gap: 10px;
+}
+.add-form-controls input[type="time"] {
+  flex-grow: 1;
+  background-color: #ffffff;
+  border: 1px solid #b0b0b0;
+  border-radius: 8px;
+  padding: 10px;
+  font-size: 16px;
+}
+.add-form-controls button {
+  background-color: #006400;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.2s;
+}
+.add-form-controls button:hover { background-color: #228B22; }
