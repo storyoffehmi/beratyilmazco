@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom'; // 'Link' kaldırıldı
 import { RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
 import { auth, db } from '../firebase';
-import './AuthScreen.css'; // Müşteri ekranıyla aynı stili kullanabilir
+import './AuthScreen.css';
 
 const AdminLogin = () => {
   const [phoneNumber, setPhoneNumber] = useState('');
@@ -71,7 +71,6 @@ const AdminLogin = () => {
           <h1 className="logo-main">Berat Yılmaz</h1>
           <p className="logo-subtitle">Hair Studio</p>
         </div>
-
         {!isCodeSent ? (
           <form className="auth-form" onSubmit={handleSendCode}>
             <input
