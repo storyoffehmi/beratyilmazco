@@ -120,7 +120,75 @@ const AdminDashboard = () => {
         <button onClick={handleLogout} className="nav-button">Çıkış Yap</button>
       </div>
       <div className="admin-box">
-        {/* ... JSX içeriği aynı ... */}
+        <div className="admin-header">
+          <h1 className="admin-logo-main">Berat Yılmaz</h1>
+        </div>
+        <div className="form-group">
+          <label htmlFor="date-picker">Günü Yönet:</label>
+          <div className="date-button-group">
+            {dateOptions.map((day) => (
+              <button
+                type="button"
+                key={day.value}
+                className={`date-button ${selectedDate === day.value ? 'selected' : ''}`}
+                onClick={() => setSelectedDate(day.value)}
+              >
+                {day.label}
+              </button>
+            ))}
+          </div>
+        </div>
+        <div className="appointments-view">
+            <h4>{selectedDate} Tarihinin Randevuları</h4>
+            {loading ? <p>Yükleniyor...</p> : (
+              appointments.length > 0 ? (
+                  <ul className="appointments-list">
+                      {appointments.map(app => (
+                          <li key={app.id} className={`status-${app.status}`}>
+                              <span>
+                                <span className="time">{app.time}</span> - {`${app.name} ${app.surname}`} ({app.service})
+                              </span>
+                              <div className="appointment-actions">
+                                {app.status === 'booked' && (
+                                  <>
+                                    <button onClick={() => handleConfirmAppointment(app.id)} className="action-btn confirm-btn">Onayla</button>
+                                    <button onClick={() => handleCancelAppointment(app.id, app.date, app.time)} className="action-btn cancel-btn">İptal Et</button>
+                                  </>
+                                )}
+                                <button onClick={() => handleDeleteAppointment(app.id, app.date, app.time)} className="action-btn delete-btn">Sil</button>
+                              </div>
+                          </li>
+                      ))}
+                  </ul>
+              ) : ( <p>Bu tarih için alınmış randevu bulunmuyor.</p> )
+            )}
+        </div>
+        <div className="slots-manager">
+          <h4>Müsait Saatleri Yönet</h4>
+          {loading ? <p>Yükleniyor...</p> : (
+            <ul className="slots-list">
+              {timeSlots.length > 0 ? (
+                timeSlots.map(time => (
+                  <li key={time}>
+                    <span>{time}</span>
+                    <button onClick={() => handleRemoveTime(time)} className="remove-btn">Sil</button>
+                  </li>
+                ))
+              ) : ( <p>Bu tarih için tanımlanmış müsait saat yok.</p> )}
+            </ul>
+          )}
+        </div>
+        <form onSubmit={handleAddTime} className="add-form">
+          <h4>Yeni Saat Ekle</h4>
+          <div className="add-form-controls">
+            <input
+              type="time"
+              value={newTime}
+              onChange={(e) => setNewTime(e.target.value)}
+            />
+            <button type="submit">Ekle</button>
+          </div>
+        </form>
       </div>
     </div>
   );
