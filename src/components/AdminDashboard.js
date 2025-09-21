@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import './AdminDashboard.css';
-// Firestore'dan veri çekmek ve sorgulamak için gerekli tüm fonksiyonlar
 import { collection, query, where, getDocs, doc, getDoc, setDoc, updateDoc, arrayUnion, arrayRemove } from "firebase/firestore";
 import { db } from '../firebase';
 
@@ -15,7 +14,6 @@ const AdminDashboard = () => {
     const fetchSlotsAndAppointments = async () => {
       setLoading(true);
       
-      // Müsait saatleri Firestore'dan çek (Bu kısım aynı)
       const slotsDocRef = doc(db, "availableSlots", selectedDate);
       const slotsDocSnap = await getDoc(slotsDocRef);
       if (slotsDocSnap.exists()) {
@@ -24,19 +22,13 @@ const AdminDashboard = () => {
         setTimeSlots([]);
       }
       
-      // --- YENİ EKLENEN BÖLÜM ---
-      // Alınmış randevuları Firestore'dan çek
-      // 'appointments' koleksiyonunda, 'date' alanı 'selectedDate'e eşit olanları sorguluyoruz
       const q = query(collection(db, "appointments"), where("date", "==", selectedDate));
       const querySnapshot = await getDocs(q);
       const fetchedAppointments = [];
       querySnapshot.forEach((doc) => {
-        // Her bir randevu dokümanının verisini ve ID'sini listeye ekliyoruz
         fetchedAppointments.push({ id: doc.id, ...doc.data() });
       });
-      // Randevuları saate göre sıralayıp state'e kaydediyoruz
       setAppointments(fetchedAppointments.sort((a, b) => a.time.localeCompare(b.time)));
-      // --- YENİ BÖLÜM SONU ---
 
       setLoading(false);
     };
@@ -46,7 +38,6 @@ const AdminDashboard = () => {
     }
   }, [selectedDate]);
 
-  // Yeni saat ekleme ve silme fonksiyonları aynı kalıyor
   const handleAddTime = async (e) => {
     e.preventDefault();
     if (newTime && !timeSlots.includes(newTime)) {
@@ -83,7 +74,6 @@ const AdminDashboard = () => {
           />
         </div>
         
-        {/* Alınmış Randevular bölümünü güncelliyoruz */}
         <div className="appointments-view">
             <h4>{selectedDate} Tarihinin Randevuları</h4>
             {loading ? <p>Yükleniyor...</p> : (
@@ -103,14 +93,34 @@ const AdminDashboard = () => {
             )}
         </div>
         
-        {/* Müsait Saatler bölümü aynı kalıyor */}
         <div className="slots-manager">
           <h4>Müsait Saatleri Yönet</h4>
-          {/* ... içerik aynı ... */}
+          {loading ? <p>Yükleniyor...</p> : (
+            <ul className="slots-list">
+              {timeSlots.length > 0 ? (
+                timeSlots.map(time => (
+                  <li key={time}>
+                    <span>{time}</span>
+                    <button onClick={() => handleRemoveTime(time)} className="remove-btn">Sil</button>
+                  </li>
+                ))
+              ) : (
+                <p>Bu tarih için tanımlanmış müsait saat yok.</p>
+              )}
+            </ul>
+          )}
         </div>
         
         <form onSubmit={handleAddTime} className="add-form">
-          {/* ... içerik aynı ... */}
+          <h4>Yeni Saat Ekle</h4>
+          <div className="add-form-controls">
+            <input
+              type="time"
+              value={newTime}
+              onChange={(e) => setNewTime(e.target.value)}
+            />
+            <button type="submit">Ekle</button>
+          </div>
         </form>
       </div>
     </div>
