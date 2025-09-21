@@ -2,10 +2,9 @@ import React from 'react';
 import { StyleSheet, SafeAreaView, StatusBar, ActivityIndicator, View } from 'react-native';
 import { WebView } from 'react-native-webview';
 
-// --- DEĞİŞTİRİLECEK ALAN ---
-// Buraya kendi React web uygulamanızın yayınlandığı adresi yazacaksınız.
-// Şimdilik test için bir placeholder (yer tutucu) adres kullanalım.
-const WEBSITE_URL = "https://expo.dev"; 
+// --- GÜNCELLENEN ALAN ---
+// Adresi sizin Netlify adresinizle değiştirdik.
+const WEBSITE_URL = "https://wondrous-flan-bc83d9.netlify.app"; 
 
 // Web sitesi yüklenirken görünecek olan yükleme animasyonu
 const LoadingIndicator = () => (
@@ -17,12 +16,10 @@ const LoadingIndicator = () => (
 export default function App() {
   return (
     <SafeAreaView style={styles.container}>
-      {/* StatusBar, telefonun en üstündeki saat, pil gibi ikonların rengini ayarlar */}
       <StatusBar barStyle="dark-content" />
       <WebView
         style={styles.webview}
         source={{ uri: WEBSITE_URL }}
-        // WebView yüklenmeye başlarken ve biterken ne olacağını belirler
         renderLoading={LoadingIndicator}
         startInLoadingState={true}
       />
@@ -30,16 +27,15 @@ export default function App() {
   );
 }
 
-// React Native'de stiller bu şekilde tanımlanır
+// Stiller aynı kalıyor
 const styles = StyleSheet.create({
   container: {
-    flex: 1, // Bu stil, alanın ekranı tamamen kaplamasını sağlar
+    flex: 1,
   },
   webview: {
     flex: 1,
   },
   loadingContainer: {
-    // Bu stil, yükleme animasyonunu ekranın ortasına konumlandırır
     position: 'absolute',
     top: 0,
     left: 0,
