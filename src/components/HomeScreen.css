@@ -1,23 +1,161 @@
-.home-container {
-  padding: 50px;
+@import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Roboto+Condensed:wght@300;400;700&display=swap');
+
+.booking-container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 100vh;
+  background-color: #808080;
+  font-family: 'Roboto Condensed', sans-serif;
+  padding: 40px 20px;
+  box-sizing: border-box;
+}
+
+.booking-box {
+  width: 100%;
+  max-width: 500px;
   text-align: center;
 }
 
-.action-button {
-  padding: 15px 30px;
-  font-size: 18px;
-  background-color: #28a745;
-  color: white;
-  border: none;
+.booking-logo-main {
+  font-family: 'Great Vibes', cursive;
+  font-size: 56px;
+  color: #000000;
+  margin: 0 0 40px 0;
+  font-weight: 400;
+}
+
+.booking-form {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+.form-group {
+  text-align: left;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 700;
+  color: #000000;
+}
+
+.form-group input[type="text"],
+.form-group input[type="date"] {
+  background-color: #404040;
+  border: 1px solid #555555;
   border-radius: 8px;
+  padding: 12px;
+  font-size: 16px;
+  color: #ffffff;
+  outline: none;
+  width: 100%;
+  box-sizing: border-box;
+  font-family: 'Roboto Condensed', sans-serif;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-group input[type="text"]:focus,
+.form-group input[type="date"]:focus {
+  border-color: #ffffff;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+}
+
+.service-button-group {
+  display: flex;
+  gap: 10px;
+}
+
+.service-button {
+  flex-grow: 1;
+  background-color: transparent;
+  color: #000000;
+  border: 1px solid #000000;
+  border-radius: 8px;
+  padding: 12px;
+  font-size: 14px;
+  font-weight: 700;
   cursor: pointer;
-  margin-top: 20px;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-.action-button:hover {
-  background-color: #218838;
+.service-button.selected {
+  background-color: #000000;
+  color: #ffffff;
 }
 
-.button-link {
-  text-decoration: none;
+.date-button-group {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.date-button {
+  background-color: transparent;
+  color: #000000;
+  border: 1px solid #000000;
+  border-radius: 8px;
+  padding: 12px 5px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  text-align: center;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.date-button.selected {
+  background-color: #000000;
+  color: #ffffff;
+}
+
+.time-slots-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.time-slot-button {
+  background-color: transparent;
+  color: #000000;
+  border: 1px solid #000000;
+  border-radius: 20px;
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.time-slot-button:hover {
+  background-color: #333333;
+  color: #ffffff;
+  border-color: #333333;
+}
+
+.time-slot-button.selected {
+  background-color: #000000;
+  color: #ffffff;
+  border-color: #000000;
+}
+
+.submit-button {
+  background-color: #000000;
+  color: #ffffff;
+  border: none;
+  border-radius: 50px;
+  padding: 16px 32px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  letter-spacing: 1px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  margin-top: 15px;
+}
+
+.submit-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
 }

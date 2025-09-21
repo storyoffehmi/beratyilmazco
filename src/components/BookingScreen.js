@@ -1,78 +1,88 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
 import './BookingScreen.css';
-// Firestore'a veri yazmak için gerekli yeni fonksiyonları import ediyoruz
 import { collection, addDoc, doc, getDoc, updateDoc, arrayRemove } from "firebase/firestore";
-// auth'u o anki kullanıcıyı bulmak için, db'yi ise veritabanı için import ediyoruz
 import { auth, db } from '../firebase';
 
 const BookingScreen = () => {
+  const [name, setName] = useState('');
+  const [surname, setSurname] = useState('');
   const [service, setService] = useState('');
   const [date, setDate] = useState('');
+  const [dateOptions, setDateOptions] = useState([]);
   const [time, setTime] = useState('');
   const [availableTimes, setAvailableTimes] = useState([]);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleDateChange = async (e) => {
-    const selectedDate = e.target.value;
+  useEffect(() => {
+    const getNextSixDays = () => {
+      const days = [];
+      const today = new Date();
+      for (let i = 0; i < 6; i++) {
+        const currentDate = new Date(today);
+        currentDate.setDate(today.getDate() + i);
+        const value = currentDate.toISOString().split('T')[0];
+        let label = '';
+        if (i === 0) { label = 'Bugün'; } 
+        else if (i === 1) { label = 'Yarın'; } 
+        else {
+          const day = String(currentDate.getDate()).padStart(2, '0');
+          const month = String(currentDate.getMonth() + 1).padStart(2, '0');
+          label = `${day}.${month}`;
+        }
+        days.push({ value, label });
+      }
+      return days;
+    };
+    setDateOptions(getNextSixDays());
+  }, []);
+
+  const handleDateChange = async (selectedDate) => {
     setDate(selectedDate);
     setTime('');
     setAvailableTimes([]);
-
     if (selectedDate) {
       setLoading(true);
       const slotsDocRef = doc(db, "availableSlots", selectedDate);
       const docSnap = await getDoc(slotsDocRef);
       if (docSnap.exists()) {
         setAvailableTimes(docSnap.data().times.sort());
-      } else {
-        console.log("Bu tarih için müsait saat bulunamadı.");
       }
       setLoading(false);
     }
   };
 
-  // Randevu onayı fonksiyonunu Firestore'a kayıt yapacak şekilde güncelliyoruz
-  const handleBookingSubmit = async (e) => { // Fonksiyonu async yapıyoruz
+  const handleBookingSubmit = async (e) => {
     e.preventDefault();
-    if (!service || !date || !time) {
+    if (!name || !surname || !service || !date || !time) {
       alert('Lütfen tüm alanları doldurun.');
       return;
     }
-
-    // O an giriş yapmış olan kullanıcıyı buluyoruz
     const currentUser = auth.currentUser;
     if (!currentUser) {
-      alert("Randevu alabilmek için giriş yapmış olmalısınız. Lütfen tekrar giriş yapın.");
-      navigate('/'); // Kullanıcıyı giriş ekranına yönlendir
+      alert("Randevu alabilmek için giriş yapmış olmalısınız.");
+      navigate('/');
       return;
     }
-
-    // Firestore'a kaydedilecek randevu verisini hazırlıyoruz
     const appointmentData = {
+      name: name,
+      surname: surname,
       service: service,
       date: date,
       time: time,
-      customerPhoneNumber: currentUser.phoneNumber, // Müşterinin telefon numarasını ekliyoruz
-      status: 'booked' // Randevu durumunu 'alındı' olarak ayarlıyoruz
+      customerPhoneNumber: currentUser.phoneNumber,
+      status: 'booked'
     };
-
     try {
       setLoading(true);
-      // 1. Yeni randevuyu 'appointments' koleksiyonuna ekliyoruz
-      const docRef = await addDoc(collection(db, "appointments"), appointmentData);
-      console.log("Randevu başarıyla kaydedildi, ID: ", docRef.id);
-      
-      // 2. Alınan saati 'availableSlots' koleksiyonundan kaldırıyoruz
+      await addDoc(collection(db, "appointments"), appointmentData);
       const slotsDocRef = doc(db, "availableSlots", date);
       await updateDoc(slotsDocRef, {
           times: arrayRemove(time)
       });
-      
       setLoading(false);
-      alert('Randevunuz başarıyla oluşturuldu!');
-      navigate('/home'); // Kullanıcıyı ana sayfaya yönlendir
+      navigate('/home', { state: { successMessage: 'Randevunuz başarıyla oluşturuldu!' } });
     } catch (error) {
       setLoading(false);
       console.error("Randevu kaydedilirken hata oluştu: ", error);
@@ -82,25 +92,49 @@ const BookingScreen = () => {
 
   return (
     <div className="booking-container">
+      <div className="page-header-nav">
+        <Link to="/home" className="nav-button">Ana Sayfa</Link>
+      </div>
       <div className="booking-box">
-        <h2>Yeni Randevu Oluştur</h2>
-        <form onSubmit={handleBookingSubmit}>
-          {/* ... Diğer form elemanları aynı kalıyor ... */}
+        <h1 className="booking-logo-main">Berat Yılmaz</h1>
+        <form className="booking-form" onSubmit={handleBookingSubmit}>
           <div className="form-group">
-            <label htmlFor="service">Hizmet Seçin:</label>
-            <select id="service" value={service} onChange={(e) => setService(e.target.value)}>
-              <option value="" disabled>-- Lütfen bir hizmet seçin --</option>
-              <option value="sac">Saç Kesimi</option>
-              <option value="sakal">Sakal Traşı</option>
-              <option value="sac-sakal">Saç + Sakal Paketi</option>
-            </select>
+            <label htmlFor="name">Ad:</label>
+            <input id="name" type="text" value={name} onChange={(e) => setName(e.target.value)} />
           </div>
-          
           <div className="form-group">
-            <label htmlFor="date">Tarih Seçin:</label>
-            <input id="date" type="date" value={date} onChange={handleDateChange} />
+            <label htmlFor="surname">Soyad:</label>
+            <input id="surname" type="text" value={surname} onChange={(e) => setSurname(e.target.value)} />
           </div>
-
+          <div className="form-group">
+            <label>Hizmet Seçin:</label>
+            <div className="service-button-group">
+              <button type="button" className={`service-button ${service === 'sac' ? 'selected' : ''}`} onClick={() => setService('sac')}>
+                Saç Kesimi
+              </button>
+              <button type="button" className={`service-button ${service === 'sakal' ? 'selected' : ''}`} onClick={() => setService('sakal')}>
+                Sakal Traşı
+              </button>
+              <button type="button" className={`service-button ${service === 'sac-sakal' ? 'selected' : ''}`} onClick={() => setService('sac-sakal')}>
+                Saç + Sakal
+              </button>
+            </div>
+          </div>
+          <div className="form-group">
+            <label>Tarih Seçin:</label>
+            <div className="date-button-group">
+              {dateOptions.map((day) => (
+                <button
+                  type="button"
+                  key={day.value}
+                  className={`date-button ${date === day.value ? 'selected' : ''}`}
+                  onClick={() => handleDateChange(day.value)}
+                >
+                  {day.label}
+                </button>
+              ))}
+            </div>
+          </div>
           <div className="form-group">
             <label>Müsait Saatler:</label>
             {loading ? <p>Müsait saatler yükleniyor...</p> : (
@@ -122,7 +156,6 @@ const BookingScreen = () => {
               </div>
             )}
           </div>
-
           <button type="submit" className="submit-button" disabled={loading}>
             {loading ? 'İşleniyor...' : 'Randevuyu Onayla'}
           </button>

@@ -1,0 +1,43 @@
+@import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Roboto+Condensed:wght@400;700&display=swap');
+
+.my-appointments-container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 100vh;
+  background-color: #808080;
+  font-family: 'Roboto Condensed', sans-serif;
+  padding: 40px 20px;
+  box-sizing: border-box;
+}
+.appointments-box {
+  width: 100%;
+  max-width: 600px;
+  text-align: center;
+}
+.appointments-logo-main {
+  font-family: 'Great Vibes', cursive;
+  font-size: 56px;
+  color: #000000;
+  margin: 0 0 40px 0;
+  font-weight: 400;
+}
+.appointments-list-user {
+  list-style: none;
+  padding: 0;
+  text-align: left;
+}
+.appointment-item {
+  background-color: #d3d3d3;
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 15px;
+  border-left: 5px solid #000000;
+}
+.appointment-item.status-confirmed { border-left-color: #006400; }
+.appointment-item.status-cancelled { border-left-color: #8B0000; opacity: 0.7; }
+
+.appointment-item p { margin: 0 0 5px 0; }
+.appointment-item .date-time { font-weight: 700; font-size: 1.1em; }
+.appointment-item .service { text-transform: capitalize; }
+.appointment-item .status { font-weight: 700; text-transform: uppercase; }

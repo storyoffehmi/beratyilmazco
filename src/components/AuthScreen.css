@@ -1,51 +1,150 @@
+/* Web uyumlu alternatif fontları Google'dan import ediyoruz */
+@import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Roboto+Condensed:wght@400;700&display=swap');
+
 .auth-container {
   display: flex;
   justify-content: center;
-  align-items: center;
-  height: 100vh;
-  background-color: #f0f2f5;
+  align-items: flex-start; /* DEĞİŞİKLİK: 'center' yerine 'flex-start' yaparak içeriği yukarı taşıdık */
+  min-height: 100vh;
+  background-color: #808080;
+  font-family: 'Roboto Condensed', sans-serif;
+  padding: 20px;
+  padding-top: 15vh; /* DEĞİŞİKLİK: İçeriğin üstten başlaması için boşluk ekledik */
 }
 
 .auth-box {
-  padding: 40px;
-  background-color: white;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  text-align: center;
   width: 100%;
   max-width: 400px;
+  text-align: center;
 }
 
-.auth-box h2 {
-  margin-bottom: 10px;
+/* Logo Alanı */
+.logo-container {
+  margin-bottom: 70px; /* DEĞİŞİKLİK: Form ile arasındaki boşluğu biraz azalttık */
 }
 
-.auth-box p {
-  margin-bottom: 25px;
-  color: #666;
+/* 'Berat Yılmaz' için Vladimir Script alternatifi */
+.logo-main {
+  font-family: 'Great Vibes', cursive;
+  font-size: 72px; /* DEĞİŞİKLİK: Yazı boyutunu 56px'ten 72px'e büyüttük */
+  color: #000000;
+  margin: 0;
+  font-weight: 600;
 }
 
+/* 'Hair Studio' için Onyx alternatifi */
+.logo-subtitle {
+  font-family: 'Roboto Condensed', sans-serif;
+  font-size: 20px;
+  font-weight: 600;
+  color: #000000;
+  letter-spacing: 5px;
+  margin-top: 15px;
+  text-transform: uppercase;
+}
+
+/* Form Elemanları */
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Telefon Numarası Giriş Alanı */
 .phone-input {
-  width: 100%;
-  padding: 12px;
-  margin-bottom: 20px;
-  border-radius: 6px;
-  border: 1px solid #ddd;
+  background-color: transparent;
+  border: 1px solid #000000;
+  border-radius: 25px;
+  padding: 12px 20px;
   font-size: 16px;
-  box-sizing: border-box; /* padding'in genişliği etkilememesi için */
+  color: #000000;
+  outline: none;
+  width: 100%;
+  max-width: 300px;
+  box-sizing: border-box;
+  text-align: center;
 }
 
+.phone-input::placeholder {
+  color: #333333;
+}
+
+/* Yardımcı Metin */
+.helper-text {
+  font-size: 14px;
+  color: #000000;
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+
+/* Buton */
 .submit-button {
-  width: 100%;
-  padding: 12px;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  border-radius: 6px;
+  background-color: transparent;
+  color: #000000;
+  border: 1px solid #000000;
+  border-radius: 25px;
+  padding: 12px 20px;
   font-size: 16px;
+  font-weight: 700;
   cursor: pointer;
+  width: 100%;
+  max-width: 300px;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .submit-button:hover {
-  background-color: #0056b3;
+  background-color: #000000;
+  color: #ffffff;
+}
+
+/* Hamburger Menü İkonu */
+.menu-icon {
+  position: absolute; /* Sayfanın sağına ve üstüne göre konumlandır */
+  top: 30px;
+  right: 30px;
+  cursor: pointer;
+  z-index: 100; /* Diğer her şeyin üzerinde olmasını sağlar */
+}
+
+.menu-icon div {
+  width: 30px;
+  height: 3px;
+  background-color: #000000;
+  margin: 6px 0;
+  transition: 0.4s;
+}
+
+/* Açılır Menü */
+.dropdown-menu {
+  position: absolute;
+  top: 70px; /* Menü ikonunun biraz altına */
+  right: 30px;
+  background-color: #f0f0f0; /* Açık gri bir menü arkaplanı */
+  border: 1px solid #000000;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  padding: 10px;
+  z-index: 99;
+  opacity: 0;
+  visibility: hidden; /* Başlangıçta gizli */
+  transform: translateY(-10px); /* Yukarıda başlasın */
+  transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s;
+}
+
+.dropdown-menu.open {
+  opacity: 1;
+  visibility: visible; /* 'open' class'ı eklendiğinde görünür yap */
+  transform: translateY(0); /* Kendi konumuna gelsin */
+}
+
+.menu-item {
+  color: #000000;
+  text-decoration: none;
+  font-size: 16px;
+  padding: 10px 20px;
+  display: block;
+}
+
+.menu-item:hover {
+  background-color: #e0e0e0;
 }

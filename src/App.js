@@ -5,6 +5,7 @@ import HomeScreen from './components/HomeScreen';
 import BookingScreen from './components/BookingScreen';
 import AdminDashboard from './components/AdminDashboard';
 import AdminLogin from './components/AdminLogin';
+import MyAppointments from './components/MyAppointments';
 
 function App() {
   return (
@@ -14,10 +15,12 @@ function App() {
         <Route path="/" element={<AuthScreen />} />
         <Route path="/home" element={<HomeScreen />} />
         <Route path="/booking" element={<BookingScreen />} />
+        <Route path="/my-appointments" element={<MyAppointments />} />
         
         {/* Admin Yolları */}
         <Route path="/admin-login" element={<AdminLogin />} />
         <Route path="/admin" element={<AdminDashboard />} /> 
+        
       </Routes>
     </Router>
   );
